@@ -1,0 +1,14 @@
+name: 每日自动生成明日排期推送
+on:
+  # UTC 03:43 = 北京时间 11:43 自动执行
+  schedule:
+    - cron: '43 3 * * *'
+  # 支持手动一键触发测试
+  workflow_dispatch:
+
+jobs:
+  trigger_task:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 调用PythonAnywhere接口生成排期并推送企业微信
+        run: curl -X POST https://ZYL2026.pythonanywhere.com/trigger
