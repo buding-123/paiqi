@@ -1,18 +1,19 @@
 name: 每日自动生成明日排期推送
 on:
-  # 北京时间每日15:00自动执行（UTC 07:00）
   schedule:
     - cron: '0 7 * * *'
-  # 支持手动一键触发测试，随时验证功能
   workflow_dispatch:
 
 jobs:
   trigger_task:
     runs-on: ubuntu-latest
     steps:
-      - name: 调用PythonAnywhere接口生成排期并推送企业微信
+      - name: 先唤醒站点
+        run: curl --max-time 6 https://ZYL2026.pythonanywhere.com/trigger || true
+      - name: 等待站点启动3秒
+        run: sleep 3
+      - name: 正式生成排期并推送
         run: |
-          # 设置10秒超时，避免接口响应慢导致workflow卡住
           curl -X POST \
             -H "Content-Type: application/json" \
             --max-time 10 \
